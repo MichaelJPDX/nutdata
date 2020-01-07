@@ -1,4 +1,4 @@
-# food
+# food - Quick & dirty interface to FDA's Nutrition Data API
 
 ## Project setup
 ```
