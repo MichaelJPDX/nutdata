@@ -40,7 +40,7 @@
                 <v-text-field
                     label="Search term"
                     placeholder="ex. Broccoli"
-                              v-model="searchTerm"
+                    v-model="searchTerm"
                   ></v-text-field>
             </v-flex>
             <v-flex xs1>
@@ -115,7 +115,7 @@ export default {
   methods: {
     goSearch() {
         const query = {"generalSearchInput":this.searchTerm, "requireAllWords":true}
-        axios.post('https://api.nal.usda.gov/fdc/v1/search?api_key=uHsQKXy2poBcjUYiBWVxxXyaJIc5CoQGUvLPi3dU', query)
+        axios.post('https://api.nal.usda.gov/fdc/v1/search?api_key=' + process.env.VUE_APP_API_KEY, query)
             .then (response => {
                 this.resultList = response.data.foods
                 this.showResults = true
@@ -134,7 +134,7 @@ export default {
         })
     },
     getDetails(id) {
-      axios.get('https://api.nal.usda.gov/fdc/v1/' + id + '?api_key=uHsQKXy2poBcjUYiBWVxxXyaJIc5CoQGUvLPi3dU')
+      axios.get('https://api.nal.usda.gov/fdc/v1/' + id + '?api_key=' + process.env.VUE_APP_API_KEY)
         .then(response => {
           this.nutrition = response.data.foodNutrients
           if (response.data.ingredients) { this.ingredients = response.data.ingredients }
