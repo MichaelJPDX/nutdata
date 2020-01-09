@@ -68,6 +68,44 @@
             </v-flex>
             <v-flex xs12 v-if="showDetails">
                 <p v-if="ingredients !== ''">Ingredients: {{ ingredients }}</p>
+                <h1>Nutrition Facts</h1>
+                <v-simple-table>
+                    <tbody>
+                        <tr><td class="text-left"><h2>Calories</h2></td>
+                            <td class="text-right"><h2>{{ cals }}</h2></td>
+                        </tr>
+                        <tr><td></td>
+                            <td class="text-right">Amount</td>
+                        </tr>
+                        <tr><td class="text-left"><strong>Total Fat</strong></td>
+                            <td class="text-right">{{ fat }}g</td>
+                        </tr>
+                        <tr><td class="text-left">&nbsp; Saturated Fat</td>
+                            <td class="text-right">{{ satfat }}g</td>
+                        </tr>
+                        <tr><td class="text-left">&nbsp; Trans Fat</td>
+                            <td class="text-right">{{ trans }}g</td>
+                        </tr>
+                        <tr><td class="text-left"><strong>Cholesterol</strong></td>
+                            <td class="text-right">{{ chol }}mg</td>
+                        </tr>
+                        <tr><td class="text-left"><strong>Sodium</strong></td>
+                            <td class="text-right">{{ salt }}mg</td>
+                        </tr>
+                        <tr><td class="text-left"><strong>Total Carbohydrate</strong></td>
+                            <td class="text-right">{{ carb }}g</td>
+                        </tr>
+                        <tr><td class="text-left">&nbsp; Dietary Fiber</td>
+                            <td class="text-right">{{ fiber }}g</td>
+                        </tr>
+                        <tr><td class="text-left">&nbsp; Total Sugars</td>
+                            <td class="text-right">{{ sugar }}g</td>
+                        </tr>
+                        <tr><td class="text-left"><strong>Protein</strong></td>
+                            <td class="text-right">{{ protein }}g</td>
+                        </tr>
+                    </tbody>
+                </v-simple-table>
               <v-simple-table>
                 <template v-slot:default>
                   <thead>
@@ -86,6 +124,7 @@
                   </tbody>
                 </template>
               </v-simple-table>
+                <p>Calories: {{ cals }}</p>
             </v-flex>
         </v-layout>
       </v-container>
@@ -110,7 +149,21 @@ export default {
     showResults: false,
     nutrition: [],
     ingredients: '',
-    showDetails: false
+    showDetails: false,
+    protein: 0,
+    fat: 0,
+    carb: 0,
+    ash: 0,
+    cals: 0,
+    water: 0,
+    sugar: 0,
+    fiber: 0,
+    chol: 0,
+    trans: 0,
+    satfat: 0,
+    monofat: 0,
+    polyfat: 0,
+    salt: 0
   }),
   methods: {
     goSearch() {
@@ -134,9 +187,32 @@ export default {
         })
     },
     getDetails(id) {
+      const nutrients = [
+            { id: 203, field: 'protein' },
+            { id: 204, field: 'fat' },
+            { id: 205, field: 'carb' },
+            { id: 207, field: 'ash' },
+            { id: 208, field: 'cals' },
+            { id: 255, field: 'water' },
+            { id: 269, field: 'sugar' },
+            { id: 291, field: 'fiber' },
+            { id: 307, field: 'salt' },
+            { id: 601, field: 'chol' },
+            { id: 605, field: 'trans' },
+            { id: 606, field: 'satfat' },
+            { id: 645, field: 'monofat' },
+            { id: 646, field: 'polyfat' }
+        ]
       axios.get('https://api.nal.usda.gov/fdc/v1/' + id + '?api_key=' + process.env.VUE_APP_API_KEY)
         .then(response => {
           this.nutrition = response.data.foodNutrients
+          for (var i = 0; i < this.nutrition.length; i++) {
+              // eslint-disable-next-line
+              const tmpVal = nutrients.find(nutrient => nutrient.id == this.nutrition[i].nutrient.number)
+              if (tmpVal) {
+                  this[tmpVal.field] = this.nutrition[i].amount
+              }
+          }
           if (response.data.ingredients) { this.ingredients = response.data.ingredients }
           this.showResults = false
           this.showDetails = true
