@@ -77,32 +77,32 @@
                         <tr><td></td>
                             <td class="text-right">Amount</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Total Fat</strong></td>
-                            <td class="text-right">{{ fat }}g</td>
+                        <tr><td class="text-left"><strong>Total Fat</strong> {{ fat }}g</td>
+                            <td class="text-right">{{ Math.round(fat/78*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Saturated Fat</td>
-                            <td class="text-right">{{ satfat }}g</td>
+                        <tr><td class="text-left">&nbsp; Saturated Fat {{ satfat }}g</td>
+                            <td class="text-right">{{ Math.round(satfat/20*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Trans Fat</td>
-                            <td class="text-right">{{ trans }}g</td>
+                        <tr><td class="text-left">&nbsp; Trans Fat {{ trans }}g</td>
+                            <td class="text-right"></td>
                         </tr>
-                        <tr><td class="text-left"><strong>Cholesterol</strong></td>
-                            <td class="text-right">{{ chol }}mg</td>
+                        <tr><td class="text-left"><strong>Cholesterol</strong> {{ chol }}mg</td>
+                            <td class="text-right">{{ Math.round(chol/300*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Sodium</strong></td>
-                            <td class="text-right">{{ salt }}mg</td>
+                        <tr><td class="text-left"><strong>Sodium</strong> {{ salt }}mg</td>
+                            <td class="text-right">{{ Math.round(salt/2300*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Total Carbohydrate</strong></td>
-                            <td class="text-right">{{ carb }}g</td>
+                        <tr><td class="text-left"><strong>Total Carbohydrate</strong> {{ carb }}g</td>
+                            <td class="text-right">{{ Math.round(carb/275*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Dietary Fiber</td>
-                            <td class="text-right">{{ fiber }}g</td>
+                        <tr><td class="text-left">&nbsp; Dietary Fiber {{ fiber }}g</td>
+                            <td class="text-right">{{ Math.round(fiber/28*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Total Sugars</td>
-                            <td class="text-right">{{ sugar }}g</td>
+                        <tr><td class="text-left">&nbsp; Total Sugars {{ sugar }}g</td>
+                            <td class="text-right">{{ Math.round(sugar/50*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Protein</strong></td>
-                            <td class="text-right">{{ protein }}g</td>
+                        <tr><td class="text-left"><strong>Protein</strong> {{ protein }}g</td>
+                            <td class="text-right">{{ Math.round(protein/50*100) }}%</td>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -119,7 +119,7 @@
                     <tr v-for="item in nutrition" :key="item.id">
                       <td class="text-left">{{ item.nutrient.number }}</td>
                       <td class="text-left">{{ item.nutrient.name }}</td>
-                      <td class="text-left">{{ item.amount }}{{ item. nutrient.unitName }}</td>
+                      <td class="text-left">{{ item.amount }}{{ item.nutrient.unitName }}</td>
                     </tr>
                   </tbody>
                 </template>
