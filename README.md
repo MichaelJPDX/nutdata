@@ -6,6 +6,11 @@ This project is not intended for public consumption. It's really just a proof-of
 ```
 npm install
 ```
+After install, you will  need to create/edit .env.local to add your API key. Obtain a key from https://fdc.nal.usda.gov/
+Set the key in .env.local using the line:
+```
+VUE_APP_API_KEY=YOUR_API_KEY
+```
 
 ### Compiles and hot-reloads for development
 ```
