@@ -85,10 +85,10 @@
                 <v-simple-table>
                     <tbody>
                         <tr><td class="text-left"><h2>Calories</h2></td>
-                            <td class="text-right"><h2>{{ cals }}</h2></td>
+                            <td class="text-right"><h2>{{ Math.round(cals*(currentconv.gramWeight/100)) }}</h2></td>
                         </tr>
                         <tr><td></td>
-                            <td class="text-right">Amount</td>
+                            <td class="text-right">% RV</td>
                         </tr>
                         <tr><td class="text-left"><strong>Total Fat</strong> {{ Math.round(fat*(currentconv.gramWeight/100)) }}g</td>
                             <td class="text-right">{{ Math.round((fat*(currentconv.gramWeight/100))/78*100) }}%</td>
