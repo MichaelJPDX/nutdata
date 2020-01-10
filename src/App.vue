@@ -40,7 +40,7 @@
                 <v-text-field
                     label="Search term"
                     placeholder="ex. Broccoli"
-                    v-model="searchTerm"
+                    v-model="searchTerm" v-on:keyup.enter="goSearch"
                   ></v-text-field>
             </v-flex>
             <v-flex xs1>
@@ -69,6 +69,19 @@
             <v-flex xs12 v-if="showDetails">
                 <p v-if="ingredients !== ''">Ingredients: {{ ingredients }}</p>
                 <h1>Nutrition Facts</h1>
+                <v-row align="center">
+                  <v-col class="d-flex text-left" cols="12" sm="6">
+                      <p>The information below is based on a {{ currentconv.modifier }} amount. To change it, use the drop-down list:</p>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="6">
+                    <v-select
+                      :items="conversion"
+                      label="Portion Sizes" :return-object="true"
+                      item-text="modifier" item-value="id"
+                      v-model="currentconv"
+                    ></v-select>
+                  </v-col>
+                </v-row>
                 <v-simple-table>
                     <tbody>
                         <tr><td class="text-left"><h2>Calories</h2></td>
@@ -77,32 +90,32 @@
                         <tr><td></td>
                             <td class="text-right">Amount</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Total Fat</strong> {{ fat }}g</td>
-                            <td class="text-right">{{ Math.round(fat/78*100) }}%</td>
+                        <tr><td class="text-left"><strong>Total Fat</strong> {{ Math.round(fat*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((fat*(currentconv.gramWeight/100))/78*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Saturated Fat {{ satfat }}g</td>
-                            <td class="text-right">{{ Math.round(satfat/20*100) }}%</td>
+                        <tr><td class="text-left">&nbsp; Saturated Fat {{ Math.round(satfat*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((satfat*(currentconv.gramWeight/100))/20*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Trans Fat {{ trans }}g</td>
+                        <tr><td class="text-left">&nbsp; Trans Fat {{ Math.round(trans*(currentconv.gramWeight/100)) }}g</td>
                             <td class="text-right"></td>
                         </tr>
-                        <tr><td class="text-left"><strong>Cholesterol</strong> {{ chol }}mg</td>
-                            <td class="text-right">{{ Math.round(chol/300*100) }}%</td>
+                        <tr><td class="text-left"><strong>Cholesterol</strong> {{ Math.round(chol*(currentconv.gramWeight/100)) }}mg</td>
+                            <td class="text-right">{{ Math.round((chol*(currentconv.gramWeight/100))/300*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Sodium</strong> {{ salt }}mg</td>
-                            <td class="text-right">{{ Math.round(salt/2300*100) }}%</td>
+                        <tr><td class="text-left"><strong>Sodium</strong> {{ Math.round(salt*(currentconv.gramWeight/100)) }}mg</td>
+                            <td class="text-right">{{ Math.round((salt*(currentconv.gramWeight/100))/2300*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Total Carbohydrate</strong> {{ carb }}g</td>
-                            <td class="text-right">{{ Math.round(carb/275*100) }}%</td>
+                        <tr><td class="text-left"><strong>Total Carbohydrate</strong> {{ Math.round(carb*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((carb*(currentconv.gramWeight/100))/275*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Dietary Fiber {{ fiber }}g</td>
-                            <td class="text-right">{{ Math.round(fiber/28*100) }}%</td>
+                        <tr><td class="text-left">&nbsp; Dietary Fiber {{ Math.round(fiber*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((fiber*(currentconv.gramWeight/100))/28*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left">&nbsp; Total Sugars {{ sugar }}g</td>
-                            <td class="text-right">{{ Math.round(sugar/50*100) }}%</td>
+                        <tr><td class="text-left">&nbsp; Total Sugars {{ Math.round(sugar*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((sugar*(currentconv.gramWeight/100))/50*100) }}%</td>
                         </tr>
-                        <tr><td class="text-left"><strong>Protein</strong> {{ protein }}g</td>
-                            <td class="text-right">{{ Math.round(protein/50*100) }}%</td>
+                        <tr><td class="text-left"><strong>Protein</strong> {{ Math.round(protein*(currentconv.gramWeight/100)) }}g</td>
+                            <td class="text-right">{{ Math.round((protein*(currentconv.gramWeight/100))/50*100) }}%</td>
                         </tr>
                     </tbody>
                 </v-simple-table>
@@ -110,21 +123,18 @@
                 <template v-slot:default>
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th class="text-left">Nutrient</th>
+                      <th class="text-left">Vitamin / Mineral</th>
                       <th class="text-left">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in nutrition" :key="item.id">
-                      <td class="text-left">{{ item.nutrient.number }}</td>
+                    <tr v-for="item in vitamins" :key="item.id">
                       <td class="text-left">{{ item.nutrient.name }}</td>
-                      <td class="text-left">{{ item.amount }}{{ item.nutrient.unitName }}</td>
+                      <td class="text-left">{{ Math.round(item.amount*(currentconv.gramWeight/100)) }}{{ item.nutrient.unitName }}</td>
                     </tr>
                   </tbody>
                 </template>
               </v-simple-table>
-                <p>Calories: {{ cals }}</p>
             </v-flex>
         </v-layout>
       </v-container>
@@ -150,6 +160,13 @@ export default {
     nutrition: [],
     ingredients: '',
     showDetails: false,
+    vitamins: [],
+    conversion: [
+        { id: 1, gramWeight: 100, modifier: "100 grams" }
+    ],
+    currentconv: { id: 1, gramWeight: 100, modifier: "100 grams" },
+    factor: 100,
+    portion: "100 grams",
     protein: 0,
     fat: 0,
     carb: 0,
@@ -203,6 +220,9 @@ export default {
             { id: 645, field: 'monofat' },
             { id: 646, field: 'polyfat' }
         ]
+      this.ingredients = ''
+      this.currentconv = { id: 1, gramWeight: 100, modifier: "100 grams" }
+      this.conversion = [{ id: 1, gramWeight: 100, modifier: "100 grams" }]
       axios.get('https://api.nal.usda.gov/fdc/v1/' + id + '?api_key=' + process.env.VUE_APP_API_KEY)
         .then(response => {
           this.nutrition = response.data.foodNutrients
@@ -211,13 +231,21 @@ export default {
               const tmpVal = nutrients.find(nutrient => nutrient.id == this.nutrition[i].nutrient.number)
               if (tmpVal) {
                   this[tmpVal.field] = this.nutrition[i].amount
+              } else {
+                  if (this.nutrition[i].amount > 0) { this.vitamins.push(this.nutrition[i]) }
               }
           }
           if (response.data.ingredients) { this.ingredients = response.data.ingredients }
+          if (response.data.foodPortions.length > 0) {
+              for (var j = 0; j < response.data.foodPortions.length; j++) {
+                  this.conversion.push(response.data.foodPortions[j])
+              }
+          }
+          
           this.showResults = false
           this.showDetails = true
           // eslint-disable-next-line
-          console.log(response.data)
+          console.log(this.conversion)
       })
     }
   }
