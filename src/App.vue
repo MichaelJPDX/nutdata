@@ -124,13 +124,13 @@
                   <thead>
                     <tr>
                       <th class="text-left">Vitamin / Mineral</th>
-                      <th class="text-left">Amount</th>
+                      <th class="text-right">%DV</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in vitamins" :key="item.id">
-                      <td class="text-left">{{ item.nutrient.name }}</td>
-                      <td class="text-left">{{ Math.round(item.amount*(currentconv.gramWeight/100)) }}{{ item.nutrient.unitName }}</td>
+                    <tr v-for="item in vitaminerals" :key="item.id">
+                      <td class="text-left" v-if="item.amount > 0">{{ item.name }} {{ Math.round(item.amount*(currentconv.gramWeight/100)) }}{{ item.units }}</td>
+                      <td class="text-right" v-if="item.amount > 0">{{ Math.round((item.amount*(currentconv.gramWeight/100))/item.dv*100) }}%</td>
                     </tr>
                   </tbody>
                 </template>
@@ -167,6 +167,35 @@ export default {
     currentconv: { id: 1, gramWeight: 100, modifier: "100 grams" },
     factor: 100,
     portion: "100 grams",
+    vitaminerals: [
+        { id: 1, name: "Biotin", dv: 300, amount: 0, units: '' },
+        { id: 417, name: "Folic Acid", dv: 400, amount: 0, units: '' },
+        { id: 406, name: "Niacin", dv: 20, amount: 0, units: '' },
+        { id: 410, name: "Pantothetic Acid", dv: 10, amount: 0, units: '' },
+        { id: 405, name: "Riboflavin", dv: 1.7, amount: 0, units: '' },
+        { id: 404, name: "Thiamin", dv: 1.5, amount: 0, units: '' },
+        { id: 318, name: "Vitamin A", dv: 5000, amount: 0, units: '' },
+        { id: 415, name: "Vitamin B-6", dv: 2, amount: 0, units: '' },
+        { id: 418, name: "Vitamin B-12", dv: 6, amount: 0, units: '' },
+        { id: 401, name: "Vitamin C", dv: 60, amount: 0, units: '' },
+        { id: 324, name: "Vitamin D", dv: 400, amount: 0, units: '' },
+        { id: 323, name: "Vitamin E", dv: 30, amount: 0, units: '' },
+        { id: 430, name: "Vitamin K", dv: 80, amount: 0, units: '' },
+        { id: 301, name: "Calcium", dv: 1000, amount: 0, units: '' },
+        { id: 15, name: "Chloride", dv: 3400, amount: 0, units: '' },
+        { id: 16, name: "Chromium", dv: 120, amount: 0, units: '' },
+        { id: 312, name: "Copper", dv: 2, amount: 0, units: '' },
+        { id: 17, name: "Iodine", dv: 150, amount: 0, units: '' },
+        { id: 303, name: "Iron", dv: 18, amount: 0, units: '' },
+        { id: 304, name: "Magnesium", dv: 400, amount: 0, units: '' },
+        { id: 315, name: "Manganese", dv: 2, amount: 0, units: '' },
+        { id: 22, name: "Molybdenum", dv: 75, amount: 0, units: '' },
+        { id: 305, name: "Phosporus", dv: 1000, amount: 0, units: '' },
+        { id: 306, name: "Potassium", dv: 3500, amount: 0, units: '' },
+        { id: 317, name: "Selenium", dv: 70, amount: 0, units: '' },
+        { id: 307, name: "Sodium", dv: 2400, amount: 0, units: '' },
+        { id: 309, name: "Zinc", dv: 15, amount: 0, units: '' }
+    ],
     protein: 0,
     fat: 0,
     carb: 0,
@@ -232,7 +261,15 @@ export default {
               if (tmpVal) {
                   this[tmpVal.field] = this.nutrition[i].amount
               } else {
-                  if (this.nutrition[i].amount > 0) { this.vitamins.push(this.nutrition[i]) }
+                  // Handle vitamins and minerals
+                  if (this.nutrition[i].amount > 0) {
+                      const tmpVit = this.vitaminerals.find(nutrient => nutrient.id == this.nutrition[i].nutrient.number)
+                      if (tmpVit) {
+                          tmpVit.amount = this.nutrition[i].amount
+                          tmpVit.units = this.nutrition[i].nutrient.unitName
+                      }
+                  }
+                  //this.vitamins.push(this.nutrition[i])
               }
           }
           if (response.data.ingredients) { this.ingredients = response.data.ingredients }
@@ -245,7 +282,7 @@ export default {
           this.showResults = false
           this.showDetails = true
           // eslint-disable-next-line
-          console.log(this.conversion)
+          //console.log(response.data.foodPortions)
       })
     }
   }

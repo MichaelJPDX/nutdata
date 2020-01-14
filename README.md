@@ -29,7 +29,9 @@ npm run lint
 
 ## Next steps
 
+This is probably as complete as it's going to get as a stand-alone app. Further work will probably be to integrate it into TravelingChili.com
+
 Partly done: Read & utilize conversion attributes of the food details to display more meaningful data (tsp of vanilla, for example)
 Turns out the foodPortions object has a rather variable structure, so that the info needed, such as "1 cup" or "tsp" may occur in different attributes of the object. Will have to add more code to probe each object for the needed info.
 
-Format similar to standard nutrition facts labeling - requires plucking out specific values from the nutrition data. This is partially done. Still more formatting to do and have to figure out what to do with vitamins, minerals and other misc data. Will probably decide what's useful based on RDAs and discard the rest.
+
