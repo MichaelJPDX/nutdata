@@ -17,15 +17,9 @@ VUE_APP_API_KEY=YOUR_API_KEY
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Demo
 
-### Lints and fixes files
-```
-npm run lint
-```
+A live demo can be found at: http://travelwebowners.org/nutrition/
 
 ## Next steps
 
