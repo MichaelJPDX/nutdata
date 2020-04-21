@@ -214,7 +214,7 @@ export default {
   methods: {
     goSearch() {
         const query = {"generalSearchInput":this.searchTerm, "requireAllWords":true}
-        axios.post('https://api.nal.usda.gov/fdc/v1/search?api_key=' + process.env.VUE_APP_API_KEY, query)
+        axios.post('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=' + process.env.VUE_APP_API_KEY, query)
             .then (response => {
                 this.resultList = response.data.foods
                 this.showResults = true
@@ -252,7 +252,7 @@ export default {
       this.ingredients = ''
       this.currentconv = { id: 1, gramWeight: 100, modifier: "100 grams" }
       this.conversion = [{ id: 1, gramWeight: 100, modifier: "100 grams" }]
-      axios.get('https://api.nal.usda.gov/fdc/v1/' + id + '?api_key=' + process.env.VUE_APP_API_KEY)
+      axios.get('https://api.nal.usda.gov/fdc/v1/food/' + id + '?api_key=' + process.env.VUE_APP_API_KEY)
         .then(response => {
           this.nutrition = response.data.foodNutrients
           for (var i = 0; i < this.nutrition.length; i++) {
